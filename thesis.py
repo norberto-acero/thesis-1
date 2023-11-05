@@ -52,7 +52,6 @@ for i in train.select_dtypes(include='object').columns.tolist():
 #%% Gráfico Pie para la clase:
 sbn.set_theme(style="darkgrid")
 fig, ax = plt.subplots(figsize=(15, 5), subplot_kw=dict(aspect="equal"))
-
 data = train['CLASE'].value_counts().values
 Etiquetas = train['CLASE'].value_counts().index
 def func(pct, allvals):
@@ -66,7 +65,7 @@ plt.show()
 #%% Gráficos estadisticos para las numéricas:
 for i in train.select_dtypes(include=np.number).columns.tolist():
     fig, axs = plt.subplots(1,3, figsize=(15,5), sharey=False)
-    ax=sbn.histplot(train, x=i, kde=True, hue='CLASE', ax=axs[0], bins=25, palette=paleta)
+    ax=sbn.histplot(train, x=i, kde=True, hue='CLASE', ax=axs[0], edgecolor='black', bins=25, palette=paleta)
     ax.lines[0].set_color('red')
     sbn.boxplot(train, x=i, hue='CLASE', ax=axs[1], medianprops={"color":"red"}, palette=paleta)
     sbn.violinplot(train, x=i, hue='CLASE', ax=axs[2], inner=None, palette=paleta)
@@ -81,6 +80,14 @@ sbn.heatmap(train.select_dtypes(include=(np.number)).corr(), annot=True, cmap='r
 
 #%% emparejamiento de variables numericas
 sbn.pairplot(train, hue='CLASE', palette=paleta)
+
+#%% Gráfica MCA de prince:
+sbn.set_theme(style="darkgrid")
+mca = pd.read_excel('MCA_.xlsx')
+g1=sbn.barplot(mca['% of var.'], color="#00205B")
+g1.set(xticklabels=[])
+g1.set(xlabel=None)
+plt.show()
 
 #%% PCA:
 train = train.dropna() #TODO se eliminan las filas con valores faltantes
