@@ -34,7 +34,7 @@ for i in train.select_dtypes(include='object').columns.tolist():
             data = t[t['CLASE']==c]
             sbn.barplot(data=t, hue=t[i], y=t['PORCENTAJE'], x=t['CLASE'], palette=sabana_paleta, edgecolor='white')
         ax.set_xlabel(i)
-        ax.set_ylabel(f'Porcentaje de {i} por CLASE')
+#¡        ax.set_ylabel(f'Porcentaje de {i} por CLASE')
 #!        ax.set_title('TITULO')
 #!        ax.legend()
         handles, labels = plt.gca().get_legend_handles_labels()
@@ -75,7 +75,7 @@ for i in train.select_dtypes(include=np.number).columns.tolist():
 
 #%% Correlación entre variables numéricas
 sbn.set_theme(style="darkgrid")
-pd.set_option('display.float_format', lambda x: '%.0f' % x)
+# pd.set_option('display.float_format', lambda x: '%.0f' % x)
 sbn.heatmap(train.select_dtypes(include=(np.number)).corr(), annot=True, cmap='rocket_r')
 
 #%% emparejamiento de variables numericas
@@ -183,10 +183,18 @@ cv_accuracy = cross_val_score(pipeline, X, y, cv=5, scoring=make_scorer(accuracy
 print("Cross-Validation Accuracy:", cv_accuracy.mean())
 
 #%% Curva ROC   
-from sklearn.ensemble import HistGradientBoostingClassifier
-from sklearn.metrics import roc_auc_score, roc_curve
-X = A.drop(['CLASE'], axis=1).values
-y = A['CLASE'].values
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.3, random_state=2023)
-CLS = HistGradientBoostingClassifier()
-CLS.fit(X_train, y_train)
+# from sklearn.ensemble import HistGradientBoostingClassifier
+# from sklearn.metrics import roc_auc_score, roc_curve
+# X = A.drop(['CLASE'], axis=1).values
+# y = A['CLASE'].values
+# X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.3, random_state=2023)
+# CLS = HistGradientBoostingClassifier()
+# CLS.fit(X_train, y_train)
+
+#%% Matriz de confusión
+from sklearn.metrics import confusion_matrix
+cm = confusion_matrix(y_true=y_test, y_pred=y_pred)
+sbn.set_theme(style="darkgrid")
+# pd.set_option('display.float_format', lambda x: "{:,0}".format(x))
+pd.options.display.float_format = '{:.0f}'.format
+sbn.heatmap(cm, annot=True, cmap='rocket_r')
