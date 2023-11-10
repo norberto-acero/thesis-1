@@ -182,15 +182,6 @@ print("Accuracy:", accuracy)
 cv_accuracy = cross_val_score(pipeline, X, y, cv=5, scoring=make_scorer(accuracy_score))
 print("Cross-Validation Accuracy:", cv_accuracy.mean())
 
-#%% Curva ROC   
-# from sklearn.ensemble import HistGradientBoostingClassifier
-# from sklearn.metrics import roc_auc_score, roc_curve
-# X = A.drop(['CLASE'], axis=1).values
-# y = A['CLASE'].values
-# X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.3, random_state=2023)
-# CLS = HistGradientBoostingClassifier()
-# CLS.fit(X_train, y_train)
-
 #%% Matriz de confusión
 from sklearn.metrics import confusion_matrix
 cm = confusion_matrix(y_true=y_test, y_pred=y_pred)
@@ -198,3 +189,12 @@ sbn.set_theme(style="darkgrid")
 # pd.set_option('display.float_format', lambda x: "{:,0}".format(x))
 pd.options.display.float_format = '{:.0f}'.format
 sbn.heatmap(cm, annot=True, cmap='rocket_r')
+
+#%% Curva ROC   
+from sklearn.ensemble import HistGradientBoostingClassifier
+from sklearn.metrics import roc_auc_score, roc_curve
+X = A.drop(['CLASE'], axis=1).values
+y = A['CLASE'].values
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.3, random_state=2023)
+CLS = HistGradientBoostingClassifier()
+CLS.fit(X_train, y_train)
