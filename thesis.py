@@ -200,3 +200,26 @@ CLS = HistGradientBoostingClassifier()
 CLS.fit(X_train, y_train)
 
 🥸🥸🥸🥸
+
+#%%Another attempt
+
+from sklearn.ensemble import HistGradientBoostingClassifier
+from sklearn.model_selection import train_test_split
+from sklearn.model_selection import cross_val_score
+import pandas as pd
+from numpy import mean
+from numpy import std
+
+df = pd.read_excel('Data.xlsx')
+
+
+train, test = train_test_split(df, test_size=0.3, random_state=2023)
+chosen_model = train
+
+X = pd.get_dummies(chosen_model.drop('CLASE', axis=1)).values
+y = chosen_model['CLASE'].values
+
+model = HistGradientBoostingClassifier()
+hgbc = model.fit(X, y)
+scores_ = cross_val_score(model, X, y, scoring='roc_auc')
+print('Roc_auc: %.3f (%.3f)' % (mean(scores_), std(scores_)))
