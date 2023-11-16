@@ -222,3 +222,26 @@ model = HistGradientBoostingClassifier()
 hgbc = model.fit(X, y)
 scores_ = cross_val_score(model, X, y, scoring='roc_auc')
 print('Roc_auc: %.3f (%.3f)' % (mean(scores_), std(scores_)))
+
+#%% SPARCE PCA
+
+from sklearn.decomposition import SparsePCA
+
+train = train.dropna() #TODO se eliminan las filas con valores faltantes
+train2 = train.copy() #TODO se copia el DF para que no se pierda.
+cat = train2.select_dtypes(include=['object']).columns #TODO se separan las variables categóricas.
+num = train2.select_dtypes(np.number).columns #TODO ...de las numéricas.
+cod = pd.get_dummies(train2, columns=cat) #TODO se binarizan las variables categoricas.
+sc = StandardScaler() #TODO se llama la función del estandarizador
+sco = pd.DataFrame(sc.fit_transform(cod), columns=cod.columns) #TODO se arma el nuevo dataframe con la estandarización
+pca = SparsePCA(n_components=2, alpha=0.5) #TODO se llama la función PCA de scikilearn.
+pca.fit_transform(sco) #TODO se adaptan los datos al PCA.
+pcdata = pca.transform(sco)
+C= train2.dropna().filter(items=['CLASE'])
+P= pd.DataFrame(pcdata)
+C.reset_index(drop=True, inplace=True)
+P.reset_index(drop=True, inplace=True)
+A= pd.concat([C,P], axis=1)
+ax=sbn.scatterplot(data=A, x=0, y=1,  hue='CLASE', palette=sabana_paleta)
+ax.set_ylabel('')
+ax.set_xlabel('')
