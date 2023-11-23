@@ -15,6 +15,7 @@ y_pred = clf.predict(x_test)
 cm = confusion_matrix(y_pred, y_test)
 rocauc = roc_auc_score(y_test, clf.predict_proba(x_test)[:,1])
 
+
 # fpr, tpr, thresholds = roc_curve(y_test, clf.predict_proba(x_test)[:,1], pos_label='CORRIENTE')
 # plt.plot(fpr, tpr)
 # sbn.heatmap(cm, annot=True, fmt='.0f', cmap='rocket_r')
